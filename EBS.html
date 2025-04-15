@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Event Booking System</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 p-4">
+  <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-6">
+    <h1 class="text-3xl font-bold text-center mb-6">Event Booking System</h1>
+
+    <!-- Calendar Section -->
+    <div class="mb-6">
+      <label for="eventDate" class="block text-lg font-semibold mb-2">Select Event Date:</label>
+      <input id="eventDate" type="text" class="border p-2 w-full rounded" placeholder="Pick a date">
+    </div>
+
+    <!-- Booking Form -->
+    <form id="bookingForm" class="space-y-4">
+      <div>
+        <label class="block">Name *</label>
+        <input type="text" id="name" class="w-full border p-2 rounded" required>
+      </div>
+      <div>
+        <label class="block">Email *</label>
+        <input type="email" id="email" class="w-full border p-2 rounded" required>
+      </div>
+      <div>
+        <label class="block">Contact Number *</label>
+        <input type="tel" id="contact" class="w-full border p-2 rounded" required>
+      </div>
+      <div>
+        <label class="block">Event Details *</label>
+        <textarea id="eventDetails" class="w-full border p-2 rounded" required></textarea>
+      </div>
+      <div class="text-right">
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">Book Now</button>
+      </div>
+    </form>
+
+    <!-- Confirmation Message -->
+    <div id="confirmation" class="mt-6 hidden bg-green-100 text-green-800 p-4 rounded"></div>
+
+    <!-- Event Listing Section -->
+    <div class="mt-8">
+      <h2 class="text-2xl font-bold mb-4">Upcoming Events</h2>
+      <div id="eventList" class="space-y-4">
+        <!-- Events populated by JS -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Flatpickr Calendar Initialization
+    const bookedDates = ["2025-04-20", "2025-04-22"];
+    flatpickr("#eventDate", {
+      dateFormat: "Y-m-d",
+      disable: bookedDates,
+      onChange: function (selectedDates, dateStr, instance) {
+        instance.element.style.borderColor = "#22c55e"; // green highlight
+      }
+    });
+
+    // Form Validation and Submission
+    const form = document.getElementById("bookingForm");
+    const confirmation = document.getElementById("confirmation");
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const contact = document.getElementById("contact").value.trim();
+      const eventDetails = document.getElementById("eventDetails").value.trim();
+
+      if (!name || !email || !contact || !eventDetails) {
+        alert("Please fill out all required fields.");
+        return;
+      }
+
+      // Simulate submission
+      confirmation.classList.remove("hidden");
+      confirmation.textContent = `Thank you ${name}, your event has been booked!`;
+      form.reset();
+    });
+
+    // Sample Upcoming Events
+    const events = [
+      { name: "Tech Conference", date: "2025-04-25", location: "New York" },
+      { name: "Wedding Expo", date: "2025-04-27", location: "Los Angeles" },
+    ];
+
+    const eventList = document.getElementById("eventList");
+    events.forEach(event => {
+      const div = document.createElement("div");
+      div.className = "bg-white p-4 rounded shadow flex justify-between items-center";
+      div.innerHTML = `
+        <div>
+          <h3 class="font-semibold text-lg">${event.name}</h3>
+          <p>${event.date} - ${event.location}</p>
+        </div>
+        <button class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">Book Now</button>
+      `;
+      eventList.appendChild(div);
+    });
+  </script>
+</body>
+
+</html>
